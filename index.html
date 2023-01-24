@@ -89,7 +89,7 @@
     });
 
     const csv = new XMLHttpRequest();
-    csv.open("GET", "/csv/cigarette.csv", false);
+    csv.open("GET", "./csv/cigarette.csv", false);
     try {
       csv.send(null);
     } catch (err) {
