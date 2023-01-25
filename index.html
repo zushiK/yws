@@ -64,6 +64,13 @@
           />
         </div>
 
+        <div class="flex gap-2 mt-1">
+          <button
+            class="px-2 py-2 w-full bg-primary text-white rounded hover:bg-blue-700 js-submit-btn"
+          >
+            送信
+          </button>
+        </div>
         <div class="display-area flex items-center justify-center">
           <div class="font-bold text-9xl">
             <div class="p-6 inline-block js-display"></div>
@@ -108,5 +115,9 @@
       }
     }
     console.log(csvArray);
+
+    document.querySelector(".js-submit-btn").addEventListener("click", () => {
+      codeInput.focus();
+    });
   </script>
 </html>
