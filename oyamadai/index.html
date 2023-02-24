@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cigaretteバーコード</title>
+
+    <meta name="robots" content="noindex" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          screens: {
+            sm: "480px",
+            md: "768px",
+            lg: "976px",
+            xl: "1440px",
+          },
+          fontFamily: {
+            sans: ["Graphik", "sans-serif"],
+            serif: ["Merriweather", "serif"],
+          },
+          extend: {
+            colors: {
+              primary: "#1fb6ff",
+            },
+            spacing: {
+              128: "32rem",
+              144: "36rem",
+            },
+            borderRadius: {
+              "4xl": "2rem",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-gray-200">
+    <header
+      class="h-12 bg-primary flex justify-center items-center px-0 md:px-8"
+    >
+      <div class="left">
+        <div class="p-2">
+          <span class="font-bold">棚割り</span>
+          <!-- <img class="h-8" src="./images/image.png" /> -->
+        </div>
+      </div>
+      <!-- <div class="right">Cigarette Barcode</div> -->
+    </header>
+
+    <main class="p-4 flex justify-center">
+      <div class="card w-full md:w-96 bg-white rounded p-4">
+        <div>
+          <label class="block font-bold mb-1" for="bar">
+            バーコード読み取り
+          </label>
+          <input
+            class="block leading-none w-full p-2 border border-black rounded js-fetch-code-product"
+            id="bar"
+            type="tel"
+          />
+        </div>
+
+        <div class="flex gap-2 mt-1">
+          <button
+            class="px-2 py-2 w-full bg-primary text-white rounded hover:bg-blue-700 js-submit-btn"
+          >
+            送信
+          </button>
+        </div>
+        <div class="display-area flex items-center justify-center">
+          <div class="font-bold text-9xl">
+            <div class="p-6 inline-block js-display"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+
+  <script>
+    const codeInput = document.querySelector(".js-fetch-code-product");
+    const displayArea = document.querySelector(".js-display");
+    codeInput.focus();
+
+    codeInput.addEventListener("change", (e) => {
+      const target = csvArray.find((ele) => ele.bar === e.target.value);
+      if (target) {
+        displayArea.innerHTML = target.num.replaceAll(" ", "<br>");
+      } else {
+        displayArea.innerHTML = "×";
+      }
+      e.target.value = "";
+    });
+
+    const csv = new XMLHttpRequest();
+    csv.open("GET", location.href + "/csv/cigarette.csv", false);
+    try {
+      csv.send(null);
+    } catch (err) {
+      console.log(err);
+    }
+
+    const csvArray = [];
+    const lines = csv.responseText.split(/\r\n|\n/);
+    for (let i = 0; i < lines.length; ++i) {
+      let cells = lines[i].split(",");
+      if (cells.length != 1) {
+        csvArray.push({
+          bar: cells[0],
+          num: cells[1],
+        });
+      }
+    }
+    console.log(csvArray);
+
+    document.querySelector(".js-submit-btn").addEventListener("click", () => {
+      codeInput.focus();
+    });
+  </script>
+</html>
